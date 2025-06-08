@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Estilo Windows</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .calculator {
+            width: 320px;
+            background-color: #1f1f1f;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .display {
+            background-color: #2d2d2d;
+            color: #fff;
+            text-align: right;
+            padding: 20px;
+            font-size: 2rem;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .memory-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        button {
+            background-color: #3b3b3b;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #505050;
+        }
+        .equal {
+            background-color: #0078d7;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">0</div>
+        <div class="memory-row">
+            <button>MC</button>
+            <button>MR</button>
+            <button>M+</button>
+            <button>M−</button>
+            <button>MS</button>
+            <button>M∨</button>
+        </div>
+        <div class="buttons">
+            <button>%</button>
+            <button>CE</button>
+            <button>C</button>
+            <button>⌫</button>
+
+            <button>¹∕ₓ</button>
+            <button>x²</button>
+            <button>√x</button>
+            <button>÷</button>
+
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>×</button>
+
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>−</button>
+
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>+</button>
+
+            <button>+/-</button>
+            <button>0</button>
+            <button>,</button>
+            <button class="equal">=</button>
+        </div>
+    </div>
+</body>
+</html>
