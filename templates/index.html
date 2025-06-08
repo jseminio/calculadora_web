@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora com Histórico</title>
+</head>
+<body>
+    <h2>Calculadora Web com Histórico</h2>
+    <form method="POST">
+        <input type="text" name="expressao" placeholder="Ex: 10 * 2 ou r / 4" required>
+        <button type="submit">Calcular</button>
+    </form>
+
+    {% if resultado %}
+        <p><strong>Resultado:</strong> {{ resultado }}</p>
+    {% endif %}
+
+    {% if erro %}
+        <p style="color: red;"><strong>Erro:</strong> {{ erro }}</p>
+    {% endif %}
+
+    <h3>Histórico:</h3>
+    <ul>
+        {% for item in historico|reverse %}
+            <li>{{ item.data_hora }} - {{ item.operacao }} = {{ item.resultado }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
