@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Estilo Windows</title>
+    <style>
+        :root {
+            --bg: #1f1f1f;
+            --display-bg: #2d2d2d;
+            --button-bg: #3b3b3b;
+            --button-hover: #505050;
+            --accent: #0078d7;
+            --text: #fff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .calculator {
+            width: 340px;
+            background-color: var(--bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 20px;
+        }
+        .display {
+            background-color: var(--display-bg);
+            color: var(--text);
+            text-align: right;
+            padding: 25px 10px;
+            font-size: 2.2rem;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .memory-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        button {
+            background-color: var(--button-bg);
+            color: var(--text);
+            border: none;
+            padding: 18px 0;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: var(--button-hover);
+        }
+        .equal {
+            background-color: var(--accent);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">0</div>
+        <div class="memory-row">
+            <button>MC</button>
+            <button>MR</button>
+            <button>M+</button>
+            <button>M−</button>
+            <button>MS</button>
+            <button>M∨</button>
+        </div>
+        <div class="buttons">
+            <button>%</button>
+            <button>CE</button>
+            <button>C</button>
+            <button>⌫</button>
+
+            <button>¹∕ₓ</button>
+            <button>x²</button>
+            <button>√x</button>
+            <button>÷</button>
+
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>×</button>
+
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>−</button>
+
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>+</button>
+
+            <button>+/-</button>
+            <button>0</button>
+            <button>,</button>
+            <button class="equal">=</button>
+        </div>
+    </div>
+</body>
+</html>
