@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modo Avançado</title>
+</head>
+<body>
+    <h2>Fórmulas Matemáticas</h2>
+    <p><a href="/">Voltar para calculadora</a></p>
+    <select id="lista"></select>
+    <div id="detalhes">
+        <h3 id="nome"></h3>
+        <p id="formula"></p>
+        <p id="explicacao"></p>
+        <div id="campos"></div>
+        <button id="btnCalcular">Calcular</button>
+        <p>Resultado: <span id="resultado"></span></p>
+        <p>Exemplo: <span id="exemplo"></span></p>
+    </div>
+    <script src="{{ url_for('static', filename='advanced.js') }}"></script>
+</body>
+</html>
