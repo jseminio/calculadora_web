@@ -1,33 +1,44 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, jsonify
 import json
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = 'troque-esta-chave'
 
-HISTORICO_ARQUIVO = 'historico.json'
-ultimo_resultado = None  # Variável global temporária
+USERS_FILE = 'users.json'
+ultimo_resultado = None
 
-def carregar_historico():
+
+def load_users():
     try:
-        with open(HISTORICO_ARQUIVO, 'r') as f:
+        with open(USERS_FILE, 'r') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return []
+        return {}
 
-def salvar_historico(operacao, resultado):
-    historico = carregar_historico()
-    historico.append({
-        'data_hora': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+
+def save_users(data):
+    with open(USERS_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
+def salvar_historico_usuario(username, operacao, resultado):
+    usuarios = load_users()
+    user = usuarios.get(username)
+    if not user:
+        return
+    user.setdefault('history', []).append({
+        'data_hora': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'operacao': operacao,
         'resultado': resultado
     })
-    with open(HISTORICO_ARQUIVO, 'w') as f:
-        json.dump(historico, f, indent=2)
+    save_users(usuarios)
+
 
 def processar_expressao(expr):
     global ultimo_resultado
     partes = expr.strip().split()
-    
+
     if len(partes) != 3:
         raise ValueError("Formato inválido: use 'n1 operador n2'.")
 
@@ -35,14 +46,14 @@ def processar_expressao(expr):
 
     if n1.lower() == 'r':
         if ultimo_resultado is None:
-            raise ValueError("Nenhum resultado anterior.")
+            raise ValueError('Nenhum resultado anterior.')
         n1 = ultimo_resultado
     else:
         n1 = float(n1)
 
     if n2.lower() == 'r':
         if ultimo_resultado is None:
-            raise ValueError("Nenhum resultado anterior.")
+            raise ValueError('Nenhum resultado anterior.')
         n2 = ultimo_resultado
     else:
         n2 = float(n2)
@@ -55,28 +66,78 @@ def processar_expressao(expr):
         resultado = n1 * n2
     elif op == '/':
         if n2 == 0:
-            raise ZeroDivisionError("Divisão por zero.")
+            raise ZeroDivisionError('Divisão por zero.')
         resultado = n1 / n2
     else:
-        raise ValueError("Operador inválido.")
+        raise ValueError('Operador inválido.')
 
     ultimo_resultado = resultado
-    salvar_historico(expr, resultado)
+    usuario = session.get('username')
+    if usuario:
+        salvar_historico_usuario(usuario, expr, resultado)
     return resultado
 
-@app.route("/", methods=["GET", "POST"])
+
+@app.route('/')
 def index():
-    resultado = ""
-    erro = ""
-    if request.method == "POST":
-        expressao = request.form.get("expressao")
-        try:
-            resultado = processar_expressao(expressao)
-        except Exception as e:
-            erro = str(e)
+    usuario = session.get('username')
+    historico = []
+    if usuario:
+        historico = load_users().get(usuario, {}).get('history', [])
+    return render_template('index.html', historico=historico, username=usuario)
 
-    historico = carregar_historico()
-    return render_template("index.html", resultado=resultado, erro=erro, historico=historico)
 
-if __name__ == "__main__":
+@app.post('/calculate')
+def calcular():
+    expressao = request.form.get('expressao') or request.json.get('expressao')
+    try:
+        resultado = processar_expressao(expressao)
+        return jsonify({'resultado': resultado})
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 400
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    erro = ''
+    if request.method == 'POST':
+        usuario = request.form['username']
+        senha = request.form['password']
+        dados = load_users()
+        if usuario in dados and dados[usuario]['password'] == senha:
+            session['username'] = usuario
+            return redirect('/')
+        erro = 'Usuário ou senha inválidos'
+    return render_template('login.html', erro=erro)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    erro = ''
+    if request.method == 'POST':
+        usuario = request.form['username']
+        senha = request.form['password']
+        dados = load_users()
+        if usuario in dados:
+            erro = 'Usuário já existe'
+        else:
+            dados[usuario] = {'password': senha, 'history': []}
+            save_users(dados)
+            session['username'] = usuario
+            return redirect('/')
+    return render_template('register.html', erro=erro)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/')
+
+
+@app.route('/avancado')
+def avancado():
+    return render_template('advanced.html')
+
+
+if __name__ == '__main__':
     app.run(debug=True)

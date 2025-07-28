@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login</h2>
+    {% if erro %}<p style="color:red">{{ erro }}</p>{% endif %}
+    <form method="POST">
+        <label>Usuário: <input type="text" name="username" required></label><br>
+        <label>Senha: <input type="password" name="password" required></label><br>
+        <button type="submit">Entrar</button>
+    </form>
+    <p><a href="/register">Criar conta</a></p>
+</body>
+</html>

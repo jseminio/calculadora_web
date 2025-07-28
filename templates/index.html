@@ -2,28 +2,35 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Davi Seminio - Calculadora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;background:#f3f3f3;padding:20px;}
+        .calc{max-width:400px;margin:auto;background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 10px rgba(0,0,0,.1);}
+        #resultado{font-size:1.4rem;margin-top:10px;}
+        ul{list-style:none;padding:0;}
+    </style>
 </head>
-<body>
-    <h2>Seminio Calculadora Web com Histórico</h2>
-    <form method="POST">
-        <input type="text" name="expressao" placeholder="Ex: 10 * 2 ou r / 4" required>
-        <button type="submit">Calcular</button>
-    </form>
-
-    {% if resultado %}
-        <p><strong>Resultado:</strong> {{ resultado }}</p>
-    {% endif %}
-
-    {% if erro %}
-        <p style="color: red;"><strong>Erro:</strong> {{ erro }}</p>
-    {% endif %}
-
-    <h3>Histórico:</h3>
-    <ul>
+<body data-user="{{ username or '' }}">
+    <div class="calc">
+        <h2>Calculadora</h2>
+        {% if username %}
+        <p>Logado como {{ username }} - <a href="/logout">Sair</a></p>
+        {% else %}
+        <p><a href="/login">Entrar</a> ou <a href="/register">Cadastrar</a></p>
+        {% endif %}
+        <input id="expressao" type="text" placeholder="Ex: 10 * 2" />
+        <button id="btnCalcular">Calcular</button>
+        <div id="resultado"></div>
+        <div id="erro" style="color:red"></div>
+        <h3>Histórico</h3>
+        <ul id="historico">
         {% for item in historico|reverse %}
             <li>{{ item.data_hora }} - {{ item.operacao }} = {{ item.resultado }}</li>
         {% endfor %}
-    </ul>
+        </ul>
+        <p><a href="/avancado">Modo avançado</a></p>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
